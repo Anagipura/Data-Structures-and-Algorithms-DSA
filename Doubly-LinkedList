@@ -1,0 +1,155 @@
+// Template for a Node in Doubly Linked List
+class Node {
+	int value;       // Value stored in the node
+	Node next;       // Pointer to the next node
+	Node prev;       // Pointer to the previous node
+
+	// Constructor to initialize a node with a value
+	public Node(int value) {
+		this.value = value;
+		next = null;
+		prev = null;
+	}
+}
+
+public class Test {
+	public static Node head;  // First node of the list
+	public static Node tail;  // Last node of the list
+
+	// Check if the Linked List is empty by verifying if head is null
+	public boolean isEmpty() {
+		return head == null;   // If empty → return true | else → return false
+	}
+
+	// Create and add a new node at the head of the list
+	public void addToHead(int value) {
+		Node newNode = new Node(value);  // Create a new node with given value
+
+		if(isEmpty() == true) { // If list is empty → set both head and tail to newNode
+			head = newNode;
+			tail = newNode;
+		} else { // If list is not empty → insert newNode before current head
+			newNode.next = head;     // Link newNode to current head
+			head.prev = newNode;     // Link current head back to newNode
+			head = newNode;          // Update head to newNode
+		}
+	}
+
+	// Delete the current head node from the list
+	public void deleteFromHead() {
+		if(isEmpty() == true) { // If list is empty → nothing to delete
+			System.out.println("Linked List not exists!");
+		} else {
+			Node temp = head;        // Store current head temporarily (optional)
+			head = head.next;        // Promote next node as new head
+			head.prev = null;        // Remove backward link to deleted node
+			System.out.println("Head deleted! " + temp.value);
+		}
+	}
+
+	// Display all nodes in the list from head to tail
+	public void display() {
+		Node temp = head;            // Start from head
+		while(temp != null) {       // Traverse until end of list
+			System.out.print(temp.value +" <==> "); 
+			temp = temp.next;       // Move to next node
+		}
+		System.out.println("null"); // End of list
+	}
+
+	// Search for a node by its value and return the node reference
+	public Node search(int location) {  // location = value of the node to find
+		Node current = head;            // Start from head
+		while(current != null) {       // Traverse from head to tail
+		 	if(current.value == location){ 
+		 		return current;       // Node found → return it
+		 	}
+		 	current = current.next;   // Move to next node
+		}
+		return null;                  // Node not found → return null
+	}
+
+	// Insert a new node after the node with given value
+	public void insertAfter(int location, int value) {
+		Node newNode = new Node(value);       // Create new node
+		Node prevNode = search(location);     // Find the node after which to insert
+		Node afterNode = prevNode.next;       // Get the node currently after prevNode
+
+		newNode.next = afterNode;             // Link newNode to afterNode
+		newNode.prev = prevNode;              // Link newNode back to prevNode
+		afterNode.prev = newNode;             // Link afterNode back to newNode
+		prevNode.next = newNode;              // Link prevNode to newNode
+	}
+
+	// Create and add a new node at the tail of the list
+	public void addToTail(int value) {
+		Node newNode = new Node(value);       // Create a new node with given value
+
+		if(isEmpty() == true) {               // If list is empty → set both head and tail to newNode
+			head = newNode;
+			tail = newNode;
+		} else {                              // If list is not empty → insert newNode after current tail
+			tail.next = newNode;              // Link current tail to newNode
+			newNode.prev = tail;              // Link newNode back to current tail
+			tail = newNode;                   // Update tail to newNode
+		}
+	}
+
+	// Delete the current tail node from the list
+	public void deleteFromTail() {
+		if(isEmpty() == true) {               // If list is empty → nothing to delete
+			System.out.println("Linked List not exists!");
+		} else {
+			Node temp = tail;                 // Store current tail temporarily (optional)
+			tail = tail.prev;                 // Promote previous node as new tail
+			tail.next = null;                 // Remove forward link to deleted node
+			System.out.println("Tail deleted! "+temp.value );
+		}
+	}
+
+	// Delete a node with a specific value from the list
+	public void deleteNode(int location) {
+		if(isEmpty() == true) {               // If list is empty → nothing to delete
+			System.out.println("Linked List not exists!");
+		} else {
+			Node deleteNode = search(location); // Find the node to delete
+			deleteNode.prev.next = deleteNode.next; // Link previous node to next node
+			deleteNode.next.prev = deleteNode.prev; // Link next node back to previous node
+		}
+	}
+
+	// Main method to test the Linked List operations
+	public static void main(String[] args) {
+		Test myList = new Test();             // Create a new Linked List
+
+		// Add nodes to the head
+		myList.addToHead(10);
+		myList.addToHead(20);
+		myList.addToHead(30);
+		myList.addToHead(40);
+		myList.addToHead(50);
+		myList.addToHead(60);
+		myList.addToHead(70);
+		myList.addToHead(80);		
+
+		myList.deleteFromHead();              // Delete the current head node
+
+		Node foundNode = myList.search(30);   // Search for a node with value 30
+		if(foundNode == null) {
+			System.out.println("Node Not Found!");
+		} else {
+			System.out.println("Node Found "+ foundNode.value);
+		}
+
+		myList.insertAfter(20,500);           // Insert 500 after node with value 20
+
+		// Add nodes to the tail
+		myList.addToTail(5);
+		myList.addToTail(1);
+
+		myList.deleteFromTail();              // Delete the current tail node
+		myList.deleteNode(60);                // Delete node with value 60
+
+		myList.display();                     // Display the final state of the list
+	}
+}
