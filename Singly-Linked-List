@@ -1,0 +1,164 @@
+// Node class represents each element in the linked list
+class Node {
+	int value;           // Stores the data value
+	Node next;           // Reference to the next node
+
+	// Constructor for a node with no next reference
+	public Node(int value) {
+		this.value = value;
+		next = null;
+	}
+
+	// Constructor for a node with a given next reference
+	public Node(int value , Node next) {
+		this.value = value;
+		this.next = next;
+	}
+}
+
+public class LinkedList {
+
+	public static Node head;  // Points to the first node in the list
+	public static Node tail;  // Points to the last node in the list
+
+	// Adds a new node at the beginning of the list
+	public void addToHead(int nodeValue) {
+		Node newNode = new Node(nodeValue); // Create new node
+		if(head ==  null) {
+			head = newNode;     // If list is empty, head and tail are the same
+			tail = newNode;
+		} else {
+			newNode.next = head; // Link new node to current head
+			head = newNode;      // Update head to new node
+		}
+	}
+
+	// Removes the head node from the list
+	public void deleteFromHead() {
+		if(head == null) {
+			System.out.println("Underflow"); // List is empty
+		} else {
+			Node temp = head;        // Store current head
+			head = head.next;        // Move head to next node
+			System.out.println("The Head Node "+temp.value+" deleted !");
+		}
+	}
+
+	// Displays all nodes in the list
+	public static void display() {
+		Node current = head;
+		while(current != null) {
+			System.out.print(current.value+" --> "); // Print current node
+			current = current.next;                  // Move to next node
+		}
+		System.out.println("Null"); // End of list
+	}
+
+	// Adds a new node at the end of the list
+	public void addToTail(int ele) {
+		Node newNode = new Node(ele); // Create new node
+		if(head == null) {
+			head = newNode;           // If list is empty, head and tail are the same
+			tail = newNode;
+		} else {
+			tail.next = newNode;      // Link current tail to new node
+			tail = newNode;           // Update tail to new node
+		}
+	}
+
+	// Removes the tail node from the list
+	public void deleteFromTail() {
+		// Traverse to the node before the tail
+		Node temp = head;
+		while(temp.next.next != null) {
+			temp = temp.next;
+		}
+		Node preTail = temp; // Node before tail
+		System.out.println("Node before the Tail : "+preTail);
+		preTail.next = null; // Remove tail
+		tail = preTail;      // Update tail
+	}
+
+	// Counts the number of nodes in the list
+	public static void count() {
+		Node temp = head;
+		int count = 0;
+		while(temp.next != null) {
+			++count;           // Increment count
+			temp = temp.next;  // Move to next node
+		}
+		System.out.println("Node count : "+count);
+	}
+
+	// Searches for a node with a specific value
+	public Node search(int loc) {
+		if(head == null) {
+			System.out.println("List is Empty");
+			return null;
+		} else {
+			Node temp;
+			for(temp=head; temp != null ; temp = temp.next ) {
+				if(temp.value == loc){ // Match found
+					return temp;
+				}
+			}
+			return null; // Not found
+		}
+	}
+
+	// Inserts a new node after a node with a specific value
+	public void insertAfter(int loc, int nodeValue) {
+		if(head == null) {
+			System.out.println("List is Empty");
+		} else {
+			Node newNode = new Node(nodeValue);     // Create new node
+			Node prevNode = search(30);             // Find node with value 30 (hardcoded)
+
+			newNode.next = prevNode.next;           // Link new node to next of found node
+			prevNode.next = newNode;                // Link found node to new node
+		}
+	}
+
+	// Deletes a node with a specific value
+	public void deleteNode(int value) {
+		if(head == null) {
+			System.out.println("Linked List is Empty!");
+		} else {
+			Node temp = head;
+			while(temp != null){
+				if(temp.value == value) {           // Match found
+					Node prevNode = temp;           // Current node
+					Node nextNode = prevNode.next.next; // Node after next
+
+					prevNode.next = nextNode;       // Skip over the next node
+					System.out.println(temp.value +" Node deleted deleteNode()");
+				}
+				temp = temp.next;                   // Move to next node
+			}
+		}
+	}
+
+	// Main method to test linked list operations
+	public static void main(String[] args) {
+		LinkedList myLinkedList = new LinkedList();
+		myLinkedList.addToHead(10);
+		myLinkedList.addToHead(20);
+		myLinkedList.addToHead(30);
+		myLinkedList.addToHead(40);
+
+		Node searchedNode = myLinkedList.search(30);
+		if(searchedNode != null){
+			System.out.println("Node found");
+		} else {
+			System.out.println("Node not found");
+		}
+
+		myLinkedList.insertAfter(30, 500); // Insert 500 after node with value 30
+
+		myLinkedList.deleteNode(30);      // Delete node with value 30
+
+		//muLinkedList.instertAfter(30, 500); // Typo in method name (commented out)
+		display(); // Show final list
+		//count();  // Count nodes (commented out)
+	}
+}
